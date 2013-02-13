@@ -223,7 +223,7 @@ parse_key([H|T], _InEncoding, Line) ->
                 {ok, Token, LinesParsed, Rest} ->
                     case Token of
                         [Attr] ->
-                            T1 = atom_to_list(Attr),
+                            T1 = binary_to_list(Attr),
                             case string:tokens(T1, ":") of
                                 [Val, Fun] ->
                                     {ok, {apply, {[list_to_atom(Fun)], [list_to_atom(Val)]}, Line}, LinesParsed, Rest};
@@ -624,8 +624,8 @@ list_to_token(_) ->
     {error, "Invalid token."}.
 
 list_to_token1(L, $', $') ->
-    list_to_atom(string:substr(L, 2, length(L) - 2));
+    list_to_binary(string:substr(L, 2, length(L) - 2));
 list_to_token1(L, $", $") ->
     string:substr(L, 2, length(L) - 2);
 list_to_token1(L, _, _) ->
-    list_to_atom(L).
+    list_to_binary(L).
